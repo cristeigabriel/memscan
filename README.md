@@ -1,5 +1,7 @@
 # memscan
-**Feature-rich** C99 library for memory scanning purposes, designed for **Windows** running machines, meant to work on both **32-bit** and **64-bit** portable executables.
+**Feature-rich** **C99** library for memory scanning purposes, designed for **Windows** running machines, meant to work on both **32-bit** and **64-bit** portable executables.
+
+**memscan** has a **modern C++** wrapper which abstracts the **C** contents in an user-friendly way. To look at the **C** example, press [here](./src/test.c), and, for the **C++** example, press [here](./src/test.cpp).
 
 ### ✔ Features
 - 🚶 Follow system
