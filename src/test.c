@@ -1,6 +1,7 @@
 #include "memscan/memscan.h"
 #include <assert.h>
 #include <stdio.h>
+#include <time.h>
 #include <windows.h>
 
 BOOL WINAPI
@@ -17,6 +18,8 @@ DllMain(HINSTANCE hinstDLL,  // handle to DLL module
 
     AllocConsole();
     freopen_s((FILE **)stdout, "CONOUT$", "w", stdout);
+
+    clock_t begin = clock();
 
     /* current tests are temporary and not guaranteed to work outside of the
      * repository owner's machine */
@@ -88,7 +91,7 @@ DllMain(HINSTANCE hinstDLL,  // handle to DLL module
                *(MS_UPtr *)(test_3.m_address + 2));
     }
 
-    /* resolve first reference of "NullRNG" string (null-terminated) */
+    /* resolve first reference of "NullRNG" string */
 
     const char NullRNG[] = "NullRNG";
 
@@ -100,6 +103,8 @@ DllMain(HINSTANCE hinstDLL,  // handle to DLL module
         printf("test6: %x %s\n", test_6.m_address,
                *(const char **)test_6.m_address);
     }
+
+    printf("time: %lf\n", (double)(clock() - begin) / CLOCKS_PER_SEC);
 
     return TRUE; // Successful DLL_PROCESS_ATTACH.
 }

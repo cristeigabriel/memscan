@@ -14,6 +14,14 @@ typedef uintptr_t MS_UPtr;
 
 typedef uint32_t MS_USize;
 
+/* Extern */
+
+#if __cplusplus
+#define MEMSCAN_EXTERN extern "C"
+#else
+#define MEMSCAN_EXTERN extern
+#endif
+
 typedef enum
 {
     /* nothing to free, or there's a condition preventing the process */
@@ -56,7 +64,7 @@ typedef struct MS_Pattern
  * @param data_size Size of 'data'
  * @return Refer to MS_Pattern for documentation
  */
-extern MS_Pattern
+MEMSCAN_EXTERN MS_Pattern
 util_build_pattern(const char *data, const MS_USize data_size);
 
 /**
@@ -65,7 +73,7 @@ util_build_pattern(const char *data, const MS_USize data_size);
  * @param pattern Reference to the pattern construct
  * @return Refer to MS_Free for documentation
  */
-extern MS_Free
+MEMSCAN_EXTERN MS_Free
 util_free_pattern(MS_Pattern *pattern);
 
 /**
@@ -76,8 +84,8 @@ util_free_pattern(MS_Pattern *pattern);
  * @param swap_endianness Whether to swap endianness or not
  * @return Value as a MEMSCAN_BYTESET_SIZE bytes array
  */
-extern MS_UByte *
-util_ptr_to_byteset(const MS_UPtr num, bool swap_endianness);
+MEMSCAN_EXTERN MS_UByte *
+               util_ptr_to_byteset(const MS_UPtr num, bool swap_endianness);
 
 /* Constants */
 

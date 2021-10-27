@@ -92,9 +92,9 @@
 
 ### 📈 Progression
 - To do:
+  - [x] ⚔️ C++ wrapper
   - [ ] 🦾 CMake package
   - [ ] 🧪 Standard tests
-  - [ ] ⚔️ C++ wrapper
   - [ ] 🤝 Multi-platform support
 
 ### ⚖️ License

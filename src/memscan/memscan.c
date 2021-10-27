@@ -63,7 +63,7 @@ typedef struct MS_Xref
 
 typedef struct MS_StringXref
 {
-    /* the null-terminated string to look for */
+    /* the string to look for */
     const char *m_data;
 
     /* string size */
@@ -235,8 +235,8 @@ memscan_find_pattern_bb_impl(const MS_UPtr start, const MS_UPtr end,
             if (current[walker] != bytes->m_data[walker] &&
                 bytes->m_data[walker] != k_memscan_wildcard)
             {
-                /* declare the state as not found for the current iteration and
-                 * go to the next one */
+                /* declare the state as not found for the current iteration
+                 * and go to the next one */
 
                 status = MS_RESULT_STATUS_NOT_FOUND;
                 break;

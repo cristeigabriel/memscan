@@ -15,20 +15,31 @@ endif()
 set(CMAKE_SYSTEM_PROCESSOR "i686")
 set(ARCH "x86")
 
+# C or C++
+set(IS_C OFF)
+
 # files
-file(GLOB_RECURSE SRC
+file(GLOB_RECURSE MEMSCAN
 "${PROJECT_SOURCE_DIR}/src/memscan/util/util.c"
 
 "${PROJECT_SOURCE_DIR}/src/memscan/memscan.c"
-
-"${PROJECT_SOURCE_DIR}/src/dll.c"
 )
 
 # create library
-add_library(${PROJECT_NAME} SHARED ${SRC})
+if (IS_C)
+    add_library(${PROJECT_NAME} SHARED ${MEMSCAN} "${PROJECT_SOURCE_DIR}/src/test.c")
+else()
+    add_library(${PROJECT_NAME} SHARED ${MEMSCAN} "${PROJECT_SOURCE_DIR}/src/test.cpp")
+endif()
 
 # set standard
-set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 99)
+if (IS_C)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD 99)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY C_STANDARD_REQUIRED ON)
+else()
+    set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
+endif()
 
 # multi-processor compilation
 add_definitions(/MP)
