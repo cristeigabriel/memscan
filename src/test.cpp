@@ -76,12 +76,13 @@ DllMain(HINSTANCE hinstDLL,  // handle to DLL module
 
         printf("test5: %x\n", test_5.value());
 
-        assert(
-            test_5.value() == (test_3.value() + 2) &&
-            (*(MS_UPtr *)test_5.value() == *(MS_UPtr *)(test_3.value() + 2)));
+        assert(test_5.value() == (test_3.value() + 2) &&
+               (*reinterpret_cast< MS_UPtr * >(test_5.value()) ==
+                *reinterpret_cast< MS_UPtr * >(test_3.value() + 2)));
 
-        printf("test5 2: %x %x\n", *(MS_UPtr *)test_5.value(),
-               *(MS_UPtr *)(test_3.value() + 2));
+        printf("test5 2: %x %x\n",
+               *reinterpret_cast< MS_UPtr * >(test_5.value()),
+               *reinterpret_cast< MS_UPtr * >(test_3.value() + 2));
     }
 
     /* find NulLRNG string */
@@ -91,10 +92,11 @@ DllMain(HINSTANCE hinstDLL,  // handle to DLL module
     if (test_6.has_value())
     {
         printf("test6: %x %s\n", test_6.value(),
-               *(const char **)test_6.value());
+               *reinterpret_cast< const char ** >(test_6.value()));
     }
 
-    printf("time: %lf\n", (double)(clock() - begin) / CLOCKS_PER_SEC);
+    printf("time: %lf\n",
+           static_cast< double >(clock() - begin) / CLOCKS_PER_SEC);
 
     return TRUE; // Successful DLL_PROCESS_ATTACH.
 }
