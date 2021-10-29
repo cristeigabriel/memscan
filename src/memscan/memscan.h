@@ -455,10 +455,10 @@ struct Range
     }
 
     [[nodiscard]] Range(const HMODULE &module)
-        : m_start(reinterpret_cast<MS_UPtr>(module))
+        : m_start(reinterpret_cast< MS_UPtr >(module))
     {
         const auto *const dos_header =
-            reinterpret_cast<PIMAGE_DOS_HEADER>(m_start);
+            reinterpret_cast< PIMAGE_DOS_HEADER >(m_start);
 
 #if MEMSCAN_UNSAFE_OPTIMIZATIONS
         if (dos_header == nullptr)
@@ -469,8 +469,8 @@ struct Range
         }
 #endif
 
-        const auto *const nt_headers = reinterpret_cast<PIMAGE_NT_HEADERS>(
-            m_start + static_cast<MS_UPtr>(dos_header->e_lfanew));
+        const auto *const nt_headers = reinterpret_cast< PIMAGE_NT_HEADERS >(
+            m_start + static_cast< MS_UPtr >(dos_header->e_lfanew));
 
 #if MEMSCAN_UNSAFE_OPTIMIZATIONS
         if (nt_headers == nullptr)
@@ -482,15 +482,15 @@ struct Range
 #endif
 
         m_end = m_start +
-                static_cast<MS_UPtr>(nt_headers->OptionalHeader.SizeOfImage);
+                static_cast< MS_UPtr >(nt_headers->OptionalHeader.SizeOfImage);
     }
 
     /* implementations */
 
     /* C-style casts are used for automatic cast deduction */
 
-    template <typename T, bool AcceptFailedFollow, MS_USize N, MS_USize N2>
-    static std::optional<T>
+    template < typename T, bool AcceptFailedFollow, MS_USize N, MS_USize N2 >
+    static std::optional< T >
     find_pattern(const MS_UPtr start, const MS_UPtr           end,
                  const MS_UByte (&pattern)[N], const MS_USize nth_match,
                  const MS_UByte (&follow)[N2], const MS_USize follow_nth_match,
@@ -511,8 +511,8 @@ struct Range
         return std::nullopt;
     }
 
-    template <typename T, bool AcceptFailedFollow, MS_USize N>
-    static std::optional<T>
+    template < typename T, bool AcceptFailedFollow, MS_USize N >
+    static std::optional< T >
     find_pattern(const MS_UPtr start, const MS_UPtr end,
                  const std::string_view pattern, const MS_USize nth_match,
                  const MS_UByte (&follow)[N], const MS_USize follow_nth_match,
@@ -533,8 +533,8 @@ struct Range
         return std::nullopt;
     }
 
-    template <typename T, bool AcceptFailedFollow, MS_USize N>
-    static std::optional<T>
+    template < typename T, bool AcceptFailedFollow, MS_USize N >
+    static std::optional< T >
     find_pattern(const MS_UPtr start, const MS_UPtr           end,
                  const MS_UByte (&pattern)[N], const MS_USize nth_match,
                  const std::string_view follow, const MS_USize follow_nth_match,
@@ -555,8 +555,8 @@ struct Range
         return std::nullopt;
     }
 
-    template <typename T, bool AcceptFailedFollow>
-    static std::optional<T>
+    template < typename T, bool AcceptFailedFollow >
+    static std::optional< T >
     find_pattern(const MS_UPtr start, const MS_UPtr end,
                  const std::string_view pattern, const MS_USize nth_match,
                  const std::string_view follow, const MS_USize follow_nth_match,
@@ -577,8 +577,8 @@ struct Range
         return std::nullopt;
     }
 
-    template <typename T, MS_USize N>
-    static std::optional<T>
+    template < typename T, MS_USize N >
+    static std::optional< T >
     find_pattern(const MS_UPtr start, const MS_UPtr end,
                  const MS_UByte (&pattern)[N],
                  const MS_USize nth_match = MEMSCAN_FIRST_MATCH) noexcept
@@ -594,8 +594,8 @@ struct Range
         return std::nullopt;
     }
 
-    template <typename T>
-    static std::optional<T>
+    template < typename T >
+    static std::optional< T >
     find_pattern(const MS_UPtr start, const MS_UPtr end,
                  const std::string_view pattern,
                  const MS_USize nth_match = MEMSCAN_FIRST_MATCH) noexcept
@@ -611,8 +611,8 @@ struct Range
         return std::nullopt;
     }
 
-    template <typename T, bool AcceptFailedFollow, MS_USize N>
-    static std::optional<T>
+    template < typename T, bool AcceptFailedFollow, MS_USize N >
+    static std::optional< T >
     find_xref(const MS_UPtr start, const MS_UPtr end, const MS_UPtr content,
               const MS_USize content_nth_match, bool      swap_endianness,
               const MS_UByte (&follow)[N], const MS_USize follow_nth_match,
@@ -634,8 +634,8 @@ struct Range
         return std::nullopt;
     }
 
-    template <typename T, bool AcceptFailedFollow>
-    static std::optional<T>
+    template < typename T, bool AcceptFailedFollow >
+    static std::optional< T >
     find_xref(const MS_UPtr start, const MS_UPtr end, const MS_UPtr content,
               const MS_USize content_nth_match, bool swap_endianness,
               const std::string_view follow, const MS_USize follow_nth_match,
@@ -657,8 +657,8 @@ struct Range
         return std::nullopt;
     }
 
-    template <typename T>
-    static std::optional<T>
+    template < typename T >
+    static std::optional< T >
     find_xref(const MS_UPtr start, const MS_UPtr end, const MS_UPtr content,
               const MS_USize content_nth_match, bool swap_endianness) noexcept
     {
@@ -673,8 +673,8 @@ struct Range
         return std::nullopt;
     }
 
-    template <typename T, bool AcceptFailedFollow, MS_USize N>
-    static std::optional<T>
+    template < typename T, bool AcceptFailedFollow, MS_USize N >
+    static std::optional< T >
     find_xref_at(const MS_UPtr start, const MS_UPtr end, const MS_UPtr address,
                  const MS_USize nth_match, bool              swap_endianness,
                  const MS_UByte (&follow)[N], const MS_USize follow_nth_match,
@@ -696,8 +696,8 @@ struct Range
         return std::nullopt;
     }
 
-    template <typename T, bool AcceptFailedFollow>
-    static std::optional<T>
+    template < typename T, bool AcceptFailedFollow >
+    static std::optional< T >
     find_xref_at(const MS_UPtr start, const MS_UPtr end, const MS_UPtr address,
                  const MS_USize nth_match, bool swap_endianness,
                  const std::string_view follow, const MS_USize follow_nth_match,
@@ -719,8 +719,8 @@ struct Range
         return std::nullopt;
     }
 
-    template <typename T>
-    static std::optional<T>
+    template < typename T >
+    static std::optional< T >
     find_xref_at(const MS_UPtr start, const MS_UPtr end, const MS_UPtr address,
                  const MS_USize nth_match, bool swap_endianness) noexcept
     {
@@ -735,8 +735,8 @@ struct Range
         return std::nullopt;
     }
 
-    template <typename T, bool AcceptFailedFollow, MS_USize N>
-    static std::optional<T>
+    template < typename T, bool AcceptFailedFollow, MS_USize N >
+    static std::optional< T >
     find_string(const MS_UPtr start, const MS_UPtr end,
                 const std::string_view string, const MS_USize nth_match,
                 const MS_UByte (&follow)[N], const MS_USize   follow_nth_match,
@@ -757,8 +757,8 @@ struct Range
         return std::nullopt;
     }
 
-    template <typename T, bool AcceptFailedFollow>
-    static std::optional<T>
+    template < typename T, bool AcceptFailedFollow >
+    static std::optional< T >
     find_string(const MS_UPtr start, const MS_UPtr end,
                 const std::string_view string, const MS_USize nth_match,
                 const std::string_view follow, const MS_USize follow_nth_match,
@@ -779,8 +779,8 @@ struct Range
         return std::nullopt;
     }
 
-    template <typename T>
-    static std::optional<T>
+    template < typename T >
+    static std::optional< T >
     find_string(const MS_UPtr start, const MS_UPtr end,
                 const std::string_view string,
                 const MS_USize         nth_match = MEMSCAN_FIRST_MATCH) noexcept
@@ -798,164 +798,164 @@ struct Range
 
     /* injections */
 
-    template <typename T, bool AcceptFailedFollow, MS_USize N, MS_USize N2>
-    std::optional<T>
+    template < typename T, bool AcceptFailedFollow, MS_USize N, MS_USize N2 >
+    std::optional< T >
     find_pattern(const MS_UByte (&pattern)[N], const MS_USize nth_match,
                  const MS_UByte (&follow)[N2], const MS_USize follow_nth_match,
                  const MS_FollowDirection follow_direction) const noexcept
     {
-        return find_pattern<T, AcceptFailedFollow, N, N2>(
+        return find_pattern< T, AcceptFailedFollow, N, N2 >(
             m_start, m_end, pattern, nth_match, follow, follow_nth_match,
             follow_direction);
     }
 
-    template <typename T, bool AcceptFailedFollow, MS_USize N>
-    std::optional<T>
+    template < typename T, bool AcceptFailedFollow, MS_USize N >
+    std::optional< T >
     find_pattern(const std::string_view pattern, const MS_USize nth_match,
                  const MS_UByte (&follow)[N], const MS_USize follow_nth_match,
                  const MS_FollowDirection follow_direction) const noexcept
     {
-        return find_pattern<T, AcceptFailedFollow, N>(
+        return find_pattern< T, AcceptFailedFollow, N >(
             m_start, m_end, pattern, nth_match, follow, follow_nth_match,
             follow_direction);
     }
 
-    template <typename T, bool AcceptFailedFollow, MS_USize N>
-    std::optional<T>
+    template < typename T, bool AcceptFailedFollow, MS_USize N >
+    std::optional< T >
     find_pattern(const MS_UByte (&pattern)[N], const MS_USize nth_match,
                  const std::string_view follow, const MS_USize follow_nth_match,
                  const MS_FollowDirection follow_direction) const noexcept
     {
-        return find_pattern<T, AcceptFailedFollow, N>(
+        return find_pattern< T, AcceptFailedFollow, N >(
             m_start, m_end, pattern, nth_match, follow, follow_nth_match,
             follow_direction);
     }
 
-    template <typename T, bool AcceptFailedFollow>
-    std::optional<T>
+    template < typename T, bool AcceptFailedFollow >
+    std::optional< T >
     find_pattern(const std::string_view pattern, const MS_USize nth_match,
                  const std::string_view follow, const MS_USize follow_nth_match,
                  const MS_FollowDirection follow_direction) const noexcept
     {
-        return find_pattern<T, AcceptFailedFollow>(
+        return find_pattern< T, AcceptFailedFollow >(
             m_start, m_end, pattern, nth_match, follow, follow_nth_match,
             follow_direction);
     }
 
-    template <typename T, MS_USize N>
-    std::optional<T>
+    template < typename T, MS_USize N >
+    std::optional< T >
     find_pattern(const MS_UByte (&pattern)[N],
                  const MS_USize match = MEMSCAN_FIRST_MATCH) const noexcept
     {
-        return find_pattern<T, N>(m_start, m_end, pattern, match);
+        return find_pattern< T, N >(m_start, m_end, pattern, match);
     }
 
-    template <typename T>
-    std::optional<T>
+    template < typename T >
+    std::optional< T >
     find_pattern(const std::string_view pattern,
                  const MS_USize nth_match = MEMSCAN_FIRST_MATCH) const noexcept
     {
-        return find_pattern<T>(m_start, m_end, pattern, nth_match);
+        return find_pattern< T >(m_start, m_end, pattern, nth_match);
     }
 
-    template <typename T, bool AcceptFailedFollow, MS_USize N>
-    std::optional<T>
+    template < typename T, bool AcceptFailedFollow, MS_USize N >
+    std::optional< T >
     find_xref(const MS_UPtr content, const MS_USize content_nth_match,
               bool           swap_endianness, const MS_UByte (&follow)[N],
               const MS_USize follow_nth_match,
               const MS_FollowDirection follow_direction) const noexcept
 
     {
-        return find_xref<T, AcceptFailedFollow, N>(
+        return find_xref< T, AcceptFailedFollow, N >(
             content, content_nth_match, swap_endianness, follow,
             follow_nth_match, follow_direction);
     }
 
-    template <typename T, bool AcceptFailedFollow>
-    std::optional<T>
+    template < typename T, bool AcceptFailedFollow >
+    std::optional< T >
     find_xref(const MS_UPtr content, const MS_USize content_nth_match,
               bool swap_endianness, const std::string_view follow,
               const MS_USize           follow_nth_match,
               const MS_FollowDirection follow_direction) const noexcept
 
     {
-        return find_xref<T, AcceptFailedFollow>(
+        return find_xref< T, AcceptFailedFollow >(
             m_start, m_end, content, content_nth_match, swap_endianness, follow,
             follow_nth_match, follow_direction);
     }
 
-    template <typename T>
-    std::optional<T> find_xref(const MS_UPtr  content,
-                               const MS_USize content_nth_match,
-                               bool           swap_endianness) const noexcept
+    template < typename T >
+    std::optional< T > find_xref(const MS_UPtr  content,
+                                 const MS_USize content_nth_match,
+                                 bool           swap_endianness) const noexcept
     {
-        return find_xref<T>(m_start, m_end, content, content_nth_match,
-                            swap_endianness);
+        return find_xref< T >(m_start, m_end, content, content_nth_match,
+                              swap_endianness);
     }
 
-    template <typename T, bool AcceptFailedFollow, MS_USize N>
-    std::optional<T>
+    template < typename T, bool AcceptFailedFollow, MS_USize N >
+    std::optional< T >
     find_xref_at(const MS_UPtr address, const MS_USize nth_match,
                  bool           swap_endianness, const MS_UByte (&follow)[N],
                  const MS_USize follow_nth_match,
                  const MS_FollowDirection follow_direction) const noexcept
 
     {
-        return find_xref_at<T, AcceptFailedFollow, N>(
+        return find_xref_at< T, AcceptFailedFollow, N >(
             m_start, m_end, address, nth_match, swap_endianness, follow,
             follow_nth_match, follow_direction);
     }
 
-    template <typename T, bool AcceptFailedFollow>
-    std::optional<T>
+    template < typename T, bool AcceptFailedFollow >
+    std::optional< T >
     find_xref_at(const MS_UPtr address, const MS_USize nth_match,
                  bool swap_endianness, const std::string_view follow,
                  const MS_USize           follow_nth_match,
                  const MS_FollowDirection follow_direction) const noexcept
 
     {
-        return find_xref_at<T, AcceptFailedFollow>(
+        return find_xref_at< T, AcceptFailedFollow >(
             m_start, m_end, address, nth_match, swap_endianness, follow,
             follow_nth_match, follow_direction);
     }
 
-    template <typename T>
-    std::optional<T> find_xref_at(const MS_UPtr  address,
-                                  const MS_USize nth_match,
-                                  bool           swap_endianness) const noexcept
+    template < typename T >
+    std::optional< T > find_xref_at(const MS_UPtr  address,
+                                    const MS_USize nth_match,
+                                    bool swap_endianness) const noexcept
     {
-        return find_xref_at<T>(m_start, m_end, address, nth_match,
-                               swap_endianness);
+        return find_xref_at< T >(m_start, m_end, address, nth_match,
+                                 swap_endianness);
     }
 
-    template <typename T, bool AcceptFailedFollow, MS_USize N>
-    std::optional<T>
+    template < typename T, bool AcceptFailedFollow, MS_USize N >
+    std::optional< T >
     find_string(const std::string_view string, const MS_USize nth_match,
                 const MS_UByte (&follow)[N], const MS_USize   follow_nth_match,
                 const MS_FollowDirection follow_direction) const noexcept
     {
-        return find_string<T, AcceptFailedFollow, N>(
+        return find_string< T, AcceptFailedFollow, N >(
             m_start, m_end, string, nth_match, follow, follow_nth_match,
             follow_direction);
     }
 
-    template <typename T, bool AcceptFailedFollow>
-    std::optional<T>
+    template < typename T, bool AcceptFailedFollow >
+    std::optional< T >
     find_string(const std::string_view string, const MS_USize nth_match,
                 const std::string_view follow, const MS_USize follow_nth_match,
                 const MS_FollowDirection follow_direction) const noexcept
     {
-        return find_string<T, AcceptFailedFollow>(
+        return find_string< T, AcceptFailedFollow >(
             m_start, m_end, string, nth_match, follow, follow_nth_match,
             follow_direction);
     }
 
-    template <typename T>
-    std::optional<T>
+    template < typename T >
+    std::optional< T >
     find_string(const std::string_view string,
                 const MS_USize nth_match = MEMSCAN_FIRST_MATCH) const noexcept
     {
-        return find_string<T>(m_start, m_end, string, nth_match);
+        return find_string< T >(m_start, m_end, string, nth_match);
     }
 
     /* helpers */
