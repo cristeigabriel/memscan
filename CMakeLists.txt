@@ -45,7 +45,8 @@ endif()
 add_definitions(/MP)
 
 # max warnings
-add_compile_options(/W4 /WX)
+add_definitions(/W4)
+add_definitions(/WX)
 
 # options
 macro(set_option option help value)

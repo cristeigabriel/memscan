@@ -53,7 +53,7 @@ util_build_pattern(const char *data, const MS_USize data_size)
     {
         /* hex substring conversion */
 
-        bytes[indice++] = strtoul(current, &current, 16);
+        bytes[indice++] = (MS_UByte)strtoul(current, &current, 16);
     }
 
     result.m_data   = bytes;
