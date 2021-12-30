@@ -31,7 +31,8 @@ DllMain(HINSTANCE hinstDLL,  // handle to DLL module
     memscan::mapped_region_t client(GetModuleHandleA("client.dll"));
 
     /* the following are just injections into the context, you can also access
-     * the functions by doing Memsacn::Range::* but that'll require bounds */
+     * the functions by doing memscan::mapped_region_t::* but that'll require
+     * bounds */
 
     auto test_1 = client.find_pattern<ms_uptr_t>({0x55, 0x8B, 0xEC});
 
