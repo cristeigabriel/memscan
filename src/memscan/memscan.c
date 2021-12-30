@@ -309,9 +309,9 @@ memscan_find_pattern_bs_impl(const ms_uptr_t start, const ms_uptr_t end,
     ms_result_t result = {0};
     result.m_address   = 0;
 
-    if (find_bytes == NULL) {
+    if (find_bytes == NULL)
         result = memscan_find_pattern_bb_impl(start, end, bytes, NULL);
-    } else {
+    else {
         /* data */
 
         ms_pattern_t pattern =
@@ -344,9 +344,9 @@ memscan_find_pattern_sb_impl(const ms_uptr_t start, const ms_uptr_t end,
     ms_result_t result = {0};
     result.m_address   = 0;
 
-    if (bytes == NULL || (bytes && bytes->m_data == NULL)) {
+    if (bytes == NULL || (bytes && bytes->m_data == NULL))
         result = memscan_find_pattern_bb_impl(start, end, NULL, find_bytes);
-    } else {
+    else {
         /* data */
 
         ms_pattern_t pattern =
@@ -379,9 +379,9 @@ memscan_find_pattern_ss_impl(const ms_uptr_t start, const ms_uptr_t end,
     ms_result_t result = {0};
     result.m_address   = 0;
 
-    if (find_bytes == NULL) {
+    if (find_bytes == NULL)
         result = memscan_find_pattern_sb_impl(start, end, bytes, NULL);
-    } else {
+    else {
         /* data */
 
         ms_pattern_t find_pattern =
@@ -473,9 +473,9 @@ memscan_find_xref_s_impl(const ms_uptr_t start, const ms_uptr_t end,
     ms_result_t result = {0};
     result.m_address   = 0;
 
-    if (find_bytes == NULL) {
+    if (find_bytes == NULL)
         result = memscan_find_xref_b_impl(start, end, xref, NULL);
-    } else {
+    else {
         /* data */
 
         ms_pattern_t pattern =
@@ -558,9 +558,9 @@ memscan_find_string_s_impl(const ms_uptr_t start, const ms_uptr_t end,
     ms_result_t result = {0};
     result.m_address   = 0;
 
-    if (find_bytes == NULL) {
+    if (find_bytes == NULL)
         result = memscan_find_string_b_impl(start, end, string, NULL);
-    } else {
+    else {
         /* data */
 
         ms_pattern_t pattern =

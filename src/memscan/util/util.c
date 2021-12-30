@@ -36,9 +36,8 @@ util_build_pattern(const char* data, const ms_usize_t data_size)
 
     ms_usize_t size = 0;
 
-    for (char* current = start; current < end; ++current) {
+    for (char* current = start; current < end; ++current)
         ++size;
-    }
 
     ms_ubyte_t* bytes = (ms_ubyte_t*)malloc(size * sizeof *bytes);
 

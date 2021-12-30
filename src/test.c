@@ -9,6 +9,9 @@ DllMain(HINSTANCE hinstDLL,  // handle to DLL module
         DWORD     fdwReason, // reason for calling function
         LPVOID    lpReserved)   // reserved
 {
+    (void)hinstDLL;
+    (void)lpReserved;
+
     if (fdwReason != DLL_PROCESS_ATTACH)
         return FALSE;
 

@@ -16,7 +16,7 @@ set(CMAKE_SYSTEM_PROCESSOR "i686")
 set(ARCH "x86")
 
 # C or C++
-set(IS_C OFF)
+set(IS_C ON)
 
 # files
 file(GLOB_RECURSE MEMSCAN
