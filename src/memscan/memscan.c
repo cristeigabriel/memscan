@@ -105,66 +105,67 @@ follow_until(const ms_uptr_t copy, const ms_uptr_t start, const ms_uptr_t end,
              const ms_find_bytes_t* restrict find_bytes)
 {
     /* data */
-
+    
     ms_follow_t result = {0};
-
+    
     ms_uptr_t address = copy;
-
+    
 #if !MEMSCAN_UNSAFE_OPTIMIZATIONS
     if (find_bytes == NULL ||
         (find_bytes != NULL &&
          (find_bytes->m_data == NULL || find_bytes->m_size == 0))) {
         result.m_address = 0;
         result.m_status  = MS_FOLLOW_STATUS_NO_VALID_FOLLOW_INFO;
-
+        
         goto return_label;
     }
 #endif
-
+    
     /* the following will run at least once, so you can follow regardless of
      * current address. it will break upon a NULL address, or after the first
      * overbounds byte, or upon a match in memory. */
-
+    
     ms_usize_t match = MEMSCAN_FIRST_MATCH;
-
+    
     int status;
-
-retry_label:
-    status = -1;
-
-    do {
-        status = memcmp((void*)address, find_bytes->m_data, find_bytes->m_size);
-
+    
+    retry_label:
+    status = memcmp((void*)address, find_bytes->m_data, find_bytes->m_size);
+    
+    while ((void*)address != NULL && address >= (start - 1) &&
+           address <= (end + 1) && status != 0)
+    {
         address +=
             find_bytes->m_direction == MS_FOLLOW_DIRECTION_BACKWARDS ? -1 : 1;
-    } while ((void*)address != NULL && address >= (start - 1) &&
-             address <= (end + 1) && status != 0);
-
-    /* the address will be at least copy +/- 1 */
-
-    result.m_address = address - 1;
-
+        
+        status = memcmp((void*)address, find_bytes->m_data, find_bytes->m_size);
+    }
+    
+    result.m_address = address;
+    
     /* if the address is smaller than start, then it is overbounds on the lhs,
      * otherwise, if it is smaller than end, it is overbounds no the rhs,
      * otherwise, if status is != 0, it is OK, otherwise, it is an incomplete
      * follow */
-
+    
     result.m_status = (result.m_address < start
-                           ? MS_FOLLOW_STATUS_FAIL_LHS
-                           : (result.m_address > end
-                                  ? MS_FOLLOW_STATUS_FAIL_RHS
-                                  : (status != 0 ? MS_FOLLOW_STATUS_INCOMPLETE
-                                                 : MS_FOLLOW_STATUS_OK)));
-
+                       ? MS_FOLLOW_STATUS_FAIL_LHS
+                       : (result.m_address > end
+                          ? MS_FOLLOW_STATUS_FAIL_RHS
+                          : (status != 0 ? MS_FOLLOW_STATUS_INCOMPLETE
+                             : MS_FOLLOW_STATUS_OK)));
+    
     /* verify match */
-
+    
     if (match != find_bytes->m_match &&
         result.m_status == MS_FOLLOW_STATUS_OK) {
         ++match;
+        address +=
+            find_bytes->m_direction == MS_FOLLOW_DIRECTION_BACKWARDS ? -1 : 1;
         goto retry_label;
     }
-
-return_label:
+    
+    return_label:
     return result;
 }
 
