@@ -10,7 +10,7 @@
 
 typedef uint8_t   ms_ubyte_t;
 typedef uintptr_t ms_uptr_t;
-typedef uint32_t  ms_usize_t;
+typedef size_t    ms_usize_t;
 
 /* Extern */
 
@@ -80,7 +80,7 @@ util_free_pattern(ms_pattern_t* pattern);
  * @return Value as a MEMSCAN_BYTESET_SIZE bytes array
  */
 MEMSCAN_EXTERN ms_ubyte_t*
-               util_ptr_to_byteset(const ms_uptr_t num, bool swap_endianness);
+util_ptr_to_byteset(const ms_uptr_t num, bool swap_endianness);
 
 /* Constants */
 
