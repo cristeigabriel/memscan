@@ -441,7 +441,17 @@ static const ms_ubyte_t k_memscan_wildcard = 0xCC;
 
 #if __cplusplus
 #include <optional>
+
+#ifdef MEMSCAN_CPP_EXCEPTIONS
 #include <stdexcept>
+#endif
+
+#ifdef MEMSCAN_CPP_EXCEPTIONS
+#define MEMSCAN_CPP_NOEXCEPT noexcept(false)
+#else
+#define MEMSCAN_CPP_NOEXCEPT noexcept(true)
+#endif
+
 #include <string>
 #include <windows.h>
 
@@ -457,16 +467,18 @@ struct mapped_region_t {
     {
     }
 
-    [[nodiscard]] mapped_region_t(const HMODULE& module)
-        : m_start(reinterpret_cast<ms_uptr_t>(module))
+    [[nodiscard]] mapped_region_t(const HMODULE& module) MEMSCAN_CPP_NOEXCEPT
+        : m_start(reinterpret_cast<ms_uptr_t>(module)) 
     {
         const auto* const dos_header =
             reinterpret_cast<PIMAGE_DOS_HEADER>(m_start);
 
-#if MEMSCAN_UNSAFE_OPTIMIZATIONS
+#if !MEMSCAN_UNSAFE_OPTIMIZATIONS
         if (dos_header == nullptr) {
+#ifdef MEMSCAN_CPP_EXCEPTIONS
             throw std::runtime_error(
                 "Failed initializing module: invalid DOS header");
+#endif
             return;
         }
 #endif
@@ -474,10 +486,12 @@ struct mapped_region_t {
         const auto* const nt_headers = reinterpret_cast<PIMAGE_NT_HEADERS>(
             m_start + static_cast<ms_uptr_t>(dos_header->e_lfanew));
 
-#if MEMSCAN_UNSAFE_OPTIMIZATIONS
+#if !MEMSCAN_UNSAFE_OPTIMIZATIONS
         if (nt_headers == nullptr) {
+#ifdef MEMSCAN_CPP_EXCEPTIONS
             throw std::runtime_error(
                 "Failed initializing module: invalid NT headers");
+#endif
             return;
         }
 #endif
