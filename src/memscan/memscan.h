@@ -528,8 +528,10 @@ struct mapped_region_t {
         while (curr != nullptr && curr != head) {
             const auto* const data =
                 reinterpret_cast<const LDR_DATA_TABLE_ENTRY* const>(curr);
-            if (data->FullDllName.Length == 0)
+            if (data->FullDllName.Length == 0) {
+                curr = curr->Flink;
                 continue;
+            }
 
             // `Length` is more rather a ptrdiff from buffer, not the actual
             // normal definition of length.
