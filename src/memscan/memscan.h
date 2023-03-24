@@ -451,12 +451,19 @@ static const ms_ubyte_t k_memscan_wildcard = 0xCC;
 #else
 #define MEMSCAN_CPP_NOEXCEPT noexcept(true)
 #endif
-
 #include <string>
 #include <windows.h>
+#include <winnt.h>
+#include <winternl.h>
 
 namespace memscan
 {
+[[nodiscard]] inline static auto
+NtCurrentPeb() noexcept
+{
+    return NtCurrentTeb()->ProcessEnvironmentBlock;
+}
+
 struct mapped_region_t {
     /* constructors */
 
@@ -467,8 +474,8 @@ struct mapped_region_t {
     {
     }
 
-    [[nodiscard]] mapped_region_t(const HMODULE& module) MEMSCAN_CPP_NOEXCEPT
-        : m_start(reinterpret_cast<ms_uptr_t>(module)) 
+    [[nodiscard]] mapped_region_t(const HMODULE module) MEMSCAN_CPP_NOEXCEPT
+        : m_start(reinterpret_cast<ms_uptr_t>(module))
     {
         const auto* const dos_header =
             reinterpret_cast<PIMAGE_DOS_HEADER>(m_start);
@@ -498,6 +505,50 @@ struct mapped_region_t {
 
         m_end = m_start +
                 static_cast<ms_uptr_t>(nt_headers->OptionalHeader.SizeOfImage);
+    }
+
+    [[nodiscard]] mapped_region_t(const std::wstring_view module_in_list)
+        MEMSCAN_CPP_NOEXCEPT
+    {
+        const auto* const ldr = NtCurrentPeb()->Ldr;
+
+#if !MEMSCAN_UNSAFE_OPTIMIZATIONS
+        if (ldr == nullptr) {
+#ifdef MEMSCAN_CPP_EXCEPTIONS
+            throw std::runtime_error(
+                "Failed initializing module: invalid PEB Ldr");
+#endif
+            return;
+        }
+#endif
+
+        const auto* head = reinterpret_cast<const LIST_ENTRY*>(
+            reinterpret_cast<ms_usize_t>(ldr) + sizeof(LIST_ENTRY));
+        const auto* curr = head->Flink;
+        while (curr != nullptr && curr != head) {
+            const auto* const data =
+                reinterpret_cast<const LDR_DATA_TABLE_ENTRY* const>(curr);
+            if (data->FullDllName.Length == 0)
+                continue;
+
+            // `Length` is more rather a ptrdiff from buffer, not the actual
+            // normal definition of length.
+            const auto module_name = std::wstring_view{
+                data->FullDllName.Buffer,
+                data->FullDllName.Length / sizeof *data->FullDllName.Buffer};
+            if (module_in_list == module_name) {
+                (*this) =
+                    mapped_region_t(static_cast<const HMODULE>(data->DllBase));
+                return;
+            }
+
+            curr = curr->Flink;
+        }
+
+#ifdef MEMSCAN_CPP_EXCEPTIONS
+        throw std::runtime_error(
+            "Failed initializing module: Unable to find module in list");
+#endif
     }
 
     /* implementations */
