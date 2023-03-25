@@ -467,6 +467,8 @@ NtCurrentPeb() noexcept
 struct mapped_region_t {
     /* constructors */
 
+    explicit mapped_region_t() = delete;
+    
     [[nodiscard]] mapped_region_t(const ms_uptr_t start,
                                   const ms_uptr_t end) noexcept
         : m_start(start),
@@ -522,8 +524,8 @@ struct mapped_region_t {
         }
 #endif
 
-        const auto* head = reinterpret_cast<const LIST_ENTRY*>(
-            reinterpret_cast<ms_usize_t>(ldr) + sizeof(LIST_ENTRY));
+        const auto* const head = reinterpret_cast<const LIST_ENTRY*>(
+            reinterpret_cast<ms_uptr_t>(ldr) + sizeof(LIST_ENTRY));
         const auto* curr = head->Flink;
         while (curr != nullptr && curr != head) {
             const auto* const data =
@@ -1020,8 +1022,8 @@ struct mapped_region_t {
     const auto get_end() const noexcept { return m_end; }
 
 private:
-    ms_uptr_t m_start;
-    ms_uptr_t m_end;
+    ms_uptr_t m_start{};
+    ms_uptr_t m_end{};
 };
 } // namespace memscan
 #endif
