@@ -540,7 +540,7 @@ struct mapped_region_t {
             const auto module_name = std::wstring_view{
                 data->FullDllName.Buffer,
                 data->FullDllName.Length / sizeof *data->FullDllName.Buffer};
-            if (module_in_list == module_name) {
+            if (module_name.ends_with(module_in_list)) {
                 (*this) =
                     mapped_region_t(static_cast<const HMODULE>(data->DllBase));
                 return;
