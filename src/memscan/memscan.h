@@ -452,17 +452,21 @@ static const ms_ubyte_t k_memscan_wildcard = 0xCC;
 #define MEMSCAN_CPP_NOEXCEPT noexcept(true)
 #endif
 #include <string>
+#ifdef _WIN32
 #include <windows.h>
 #include <winnt.h>
 #include <winternl.h>
+#endif
 
 namespace memscan
 {
+#ifdef _WIN32
 [[nodiscard]] inline static auto
 NtCurrentPeb() noexcept
 {
     return NtCurrentTeb()->ProcessEnvironmentBlock;
 }
+#endif
 
 struct mapped_region_t {
     /* constructors */
@@ -476,6 +480,7 @@ struct mapped_region_t {
     {
     }
 
+#ifdef _WIN32
     [[nodiscard]] mapped_region_t(const HMODULE module) MEMSCAN_CPP_NOEXCEPT
         : m_start(reinterpret_cast<ms_uptr_t>(module))
     {
@@ -508,7 +513,9 @@ struct mapped_region_t {
         m_end = m_start +
                 static_cast<ms_uptr_t>(nt_headers->OptionalHeader.SizeOfImage);
     }
+#endif
 
+#ifdef _WIN32
     [[nodiscard]] mapped_region_t(const std::wstring_view module_in_list)
         MEMSCAN_CPP_NOEXCEPT
     {
@@ -554,6 +561,7 @@ struct mapped_region_t {
             "Failed initializing module: Unable to find module in list");
 #endif
     }
+#endif
 
     /* implementations */
 
